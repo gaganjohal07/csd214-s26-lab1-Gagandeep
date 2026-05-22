@@ -9,13 +9,16 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class App {
+
     private List<SaleableItem> items = new ArrayList<>();
     private CashTill cashTill = new CashTill();
     private Scanner input = new Scanner(System.in);
 
     public void run() {
         populate();
+
         int choice = 0;
+
         while (choice != 99) {
             System.out.println("\n***********************");
             System.out.println(" 1. Add Items");
@@ -53,7 +56,6 @@ public class App {
                     listAny();
                     break;
                 case 99:
-                    // Exit
                     break;
                 default:
                     System.out.println("Invalid choice.");
@@ -63,12 +65,14 @@ public class App {
 
     public void addItem() {
         int choice = 0;
+
         while (choice != 99) {
             System.out.println("\nAdd an item\n");
             System.out.println("1. Add Book");
             System.out.println("2. Add Magazine");
             System.out.println("3. Add DiscMag");
             System.out.println("4. Add Ticket");
+            System.out.println("5. Add Gaming Keyboard");
             System.out.println("99. Exit");
 
             try {
@@ -82,17 +86,30 @@ public class App {
             if (choice == 99) return;
 
             SaleableItem item = null;
-            switch(choice) {
-                case 1: item = new Book(); break;
-                case 2: item = new Magazine(); break;
-                case 3: item = new DiscMag(); break;
-                case 4: item = new Ticket(); break;
-                default: System.out.println("Invalid selection."); continue;
+
+            switch (choice) {
+                case 1:
+                    item = new Book();
+                    break;
+                case 2:
+                    item = new Magazine();
+                    break;
+                case 3:
+                    item = new DiscMag();
+                    break;
+                case 4:
+                    item = new Ticket();
+                    break;
+                case 5:
+                    item = new GamingKeyboard();
+                    break;
+                default:
+                    System.out.println("Invalid selection.");
+                    continue;
             }
 
-            if(item instanceof Editable) {
-                // PASS THE SHARED SCANNER
-                ((Editable)item).initialize(this.input);
+            if (item instanceof Editable) {
+                ((Editable) item).initialize(this.input);
             }
 
             addItem(item);
@@ -105,6 +122,7 @@ public class App {
 
     public void listAny() {
         int choice = 0;
+
         while (choice != 99) {
             System.out.println("\nAll Items");
             System.out.println("-----------");
@@ -114,6 +132,7 @@ public class App {
             System.out.println("3. Magazines");
             System.out.println("4. DiscMags");
             System.out.println("5. Tickets");
+            System.out.println("6. Gaming Keyboards");
             System.out.println("99. Exit");
 
             try {
@@ -127,17 +146,34 @@ public class App {
             if (choice == 99) return;
 
             Class<?> filter = null;
-            switch(choice) {
-                case 1: filter = null; break;
-                case 2: filter = Book.class; break;
-                case 3: filter = Magazine.class; break;
-                case 4: filter = DiscMag.class; break;
-                case 5: filter = Ticket.class; break;
-                default: System.out.println("Invalid selection."); continue;
+
+            switch (choice) {
+                case 1:
+                    filter = null;
+                    break;
+                case 2:
+                    filter = Book.class;
+                    break;
+                case 3:
+                    filter = Magazine.class;
+                    break;
+                case 4:
+                    filter = DiscMag.class;
+                    break;
+                case 5:
+                    filter = Ticket.class;
+                    break;
+                case 6:
+                    filter = GamingKeyboard.class;
+                    break;
+                default:
+                    System.out.println("Invalid selection.");
+                    continue;
             }
 
             for (SaleableItem i : items) {
                 boolean show = false;
+
                 if (filter == null) {
                     show = true;
                 } else {
@@ -161,14 +197,17 @@ public class App {
 
     public void editItem() {
         System.out.println("Select item index to edit (0 to " + (items.size() - 1) + "):");
-        for(int i=0; i<items.size(); i++) {
+
+        for (int i = 0; i < items.size(); i++) {
             System.out.println(i + ". " + items.get(i));
         }
 
         try {
             int idx = Integer.parseInt(input.nextLine().trim());
+
             if (idx >= 0 && idx < items.size()) {
                 SaleableItem item = items.get(idx);
+
                 if (item instanceof Editable) {
                     editItem((Editable) item);
                 } else {
@@ -181,17 +220,19 @@ public class App {
     }
 
     public void editItem(Editable item) {
-        // PASS THE SHARED SCANNER
         item.edit(this.input);
     }
 
     public void deleteItem() {
         System.out.println("Select item index to delete:");
-        for(int i=0; i<items.size(); i++) {
+
+        for (int i = 0; i < items.size(); i++) {
             System.out.println(i + ". " + items.get(i));
         }
+
         try {
             int idx = Integer.parseInt(input.nextLine().trim());
+
             if (idx >= 0 && idx < items.size()) {
                 items.remove(idx);
                 System.out.println("Item deleted.");
@@ -203,11 +244,14 @@ public class App {
 
     public void sellItem() {
         System.out.println("Select item index to sell:");
-        for(int i=0; i<items.size(); i++) {
+
+        for (int i = 0; i < items.size(); i++) {
             System.out.println(i + ". " + items.get(i));
         }
+
         try {
             int idx = Integer.parseInt(input.nextLine().trim());
+
             if (idx >= 0 && idx < items.size()) {
                 SaleableItem item = items.get(idx);
                 cashTill.sellItem(item);
@@ -223,7 +267,11 @@ public class App {
 
     public SaleableItem findItem(SaleableItem item) {
         int index = items.indexOf(item);
-        if (index != -1) return items.get(index);
+
+        if (index != -1) {
+            return items.get(index);
+        }
+
         return null;
     }
 
@@ -233,44 +281,48 @@ public class App {
 
     public void populate() {
         System.out.println("Populating data with JavaFaker...");
+
         Faker faker = new Faker();
 
         for (int i = 0; i < 2; i++) {
-            // Book
+
             Book b = new Book(
                     faker.book().author(),
                     faker.book().title(),
-                    faker.number().randomDouble(2, 10, 50), // Price
-                    faker.number().numberBetween(1, 20)     // Copies
+                    faker.number().randomDouble(2, 10, 50),
+                    faker.number().numberBetween(1, 20)
             );
             addItem(b);
 
-            // Magazine
             Magazine m = new Magazine(
-                    faker.number().numberBetween(100, 500), // Order Qty
-                    faker.date().past(30, TimeUnit.DAYS),   // Date
-                    faker.book().title() + " Monthly",      // Title
-                    faker.number().randomDouble(2, 5, 15),  // Price
-                    faker.number().numberBetween(5, 50)     // Copies
+                    faker.number().numberBetween(100, 500),
+                    faker.date().past(30, TimeUnit.DAYS),
+                    faker.book().title() + " Monthly",
+                    faker.number().randomDouble(2, 5, 15),
+                    faker.number().numberBetween(5, 50)
             );
             addItem(m);
 
-            // DiscMag
             DiscMag dm = new DiscMag(
-                    faker.bool().bool(),                    // Has Disc
-                    faker.number().numberBetween(50, 200),  // Order Qty
-                    faker.date().past(60, TimeUnit.DAYS),   // Date
-                    "Tech Disc: " + faker.app().name(),     // Title
-                    faker.number().randomDouble(2, 10, 25), // Price
-                    faker.number().numberBetween(5, 30)     // Copies
+                    faker.bool().bool(),
+                    faker.number().numberBetween(50, 200),
+                    faker.date().past(60, TimeUnit.DAYS),
+                    "Tech Disc: " + faker.app().name(),
+                    faker.number().randomDouble(2, 10, 25),
+                    faker.number().numberBetween(5, 30)
             );
             addItem(dm);
 
-            // Ticket
             Ticket t = new Ticket();
             t.description = "Concert: " + faker.rockBand().name();
             t.price = faker.number().randomDouble(2, 50, 150);
             addItem(t);
+
+            GamingKeyboard gk = new GamingKeyboard(
+                    faker.company().name(),
+                    "Blue Switch"
+            );
+            addItem(gk);
         }
     }
 }
