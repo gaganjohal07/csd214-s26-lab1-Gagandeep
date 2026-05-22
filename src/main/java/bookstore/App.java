@@ -73,6 +73,7 @@ public class App {
             System.out.println("3. Add DiscMag");
             System.out.println("4. Add Ticket");
             System.out.println("5. Add Gaming Keyboard");
+            System.out.println("6. Add Gaming Mouse");
             System.out.println("99. Exit");
 
             try {
@@ -102,6 +103,9 @@ public class App {
                     break;
                 case 5:
                     item = new GamingKeyboard();
+                    break;
+                case 6:
+                    item = new GamingMouse();
                     break;
                 default:
                     System.out.println("Invalid selection.");
@@ -133,6 +137,7 @@ public class App {
             System.out.println("4. DiscMags");
             System.out.println("5. Tickets");
             System.out.println("6. Gaming Keyboards");
+            System.out.println("7. Gaming Mice");
             System.out.println("99. Exit");
 
             try {
@@ -165,6 +170,9 @@ public class App {
                     break;
                 case 6:
                     filter = GamingKeyboard.class;
+                    break;
+                case 7:
+                    filter = GamingMouse.class;
                     break;
                 default:
                     System.out.println("Invalid selection.");
@@ -323,6 +331,12 @@ public class App {
                     "Blue Switch"
             );
             addItem(gk);
+
+            GamingMouse gm = new GamingMouse(
+                    faker.company().name(),
+                    faker.number().numberBetween(800, 6400)
+            );
+            addItem(gm);
         }
     }
 }

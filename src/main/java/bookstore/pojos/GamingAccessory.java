@@ -23,11 +23,13 @@ public abstract class GamingAccessory extends Product {
         this.brand = brand;
     }
 
+    @Override
     public void initialize(Scanner input) {
         System.out.print("Enter brand: ");
         brand = input.nextLine();
     }
 
+    @Override
     public void edit(Scanner input) {
         System.out.print("Enter new brand: ");
         brand = input.nextLine();
@@ -35,6 +37,6 @@ public abstract class GamingAccessory extends Product {
 
     @Override
     public String toString() {
-        return super.toString() + " brand='" + brand + "'";
+        return "Brand: " + brand;
     }
 }

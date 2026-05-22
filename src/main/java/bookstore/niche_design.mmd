@@ -1,0 +1,39 @@
+classDiagram
+    SaleableItem <|.. Product
+    Editable <|.. Product
+
+    Product <|-- GamingAccessory
+    GamingAccessory <|-- GamingMouse
+    GamingAccessory <|-- GamingKeyboard
+
+    class Product {
+        +initialize()
+        +edit()
+        +sellItem()
+    }
+
+    class GamingAccessory {
+        -String brand
+        +getBrand()
+        +setBrand()
+        +initialize()
+        +edit()
+    }
+
+    class GamingMouse {
+        -int dpi
+        +getDpi()
+        +setDpi()
+        +initialize()
+        +edit()
+        +sellItem()
+    }
+
+    class GamingKeyboard {
+        -String switchType
+        +getSwitchType()
+        +setSwitchType()
+        +initialize()
+        +edit()
+        +sellItem()
+    }
